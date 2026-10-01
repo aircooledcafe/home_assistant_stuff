@@ -1,0 +1,23 @@
+alias: 'Alert: Notify when Matter sensors go offline'
+description: Sends push notification to iPhone when a Matter device is unresponsive
+triggers:
+  - entity_id:
+      - sensor.alpstuga_air_quality_monitor_temperature
+      - sensor.bathroom_bathroom_motion_sensor_illuminance
+      - sensor.living_room_timmerflotte_living_room_temperature
+      - sensor.office_alpstuga_office_temperature
+      - sensor.garden_timmerflotte_floating_temperature
+      - sensor.office_timmerflotte_office_temperature
+    to:
+      - unavailable
+      - unknown
+    for:
+      minutes: 2
+    trigger: state
+actions:
+  - action: notify.send_message
+    target:
+      entity_id: notify.iphone_17_pro_max
+    data:
+      title: Device Offline
+      message: '{{ device_name(trigger.entity_id) }} has stopped sending data.'

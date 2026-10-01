@@ -1,0 +1,38 @@
+alias: Rain stopped
+description: ''
+triggers:
+  - trigger: state
+    entity_id:
+      - sensor.ws3900a_rain_rate
+    to:
+      - '0'
+      - '0.0'
+    for:
+      hours: 0
+      minutes: 3
+      seconds: 0
+conditions: []
+actions:
+  - action: notify.send_message
+    metadata: {}
+    target:
+      entity_id: notify.iphone_17_pro_max
+    data:
+      message: The rain has stopped!
+  - action: notify.send_message
+    metadata: {}
+    target:
+      entity_id: notify.pixel_9_pro_xl
+    data:
+      message: The rain has stopped!
+  - action: notify.mobile_app_iphone_17_pro_max
+    data:
+      message: clear_notification
+      data:
+        tag: raining_live
+  - action: notify.mobile_app_pixel_9_pro_xl
+    data:
+      message: clear_notification
+      data:
+        tag: raining_live
+mode: single
