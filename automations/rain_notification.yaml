@@ -1,4 +1,4 @@
-alias: Rain Rate Alert
+alias: Rain Live Activity
 description: Sends different notifications depending on the rain intensity.
 triggers:
   - trigger: state
@@ -8,6 +8,7 @@ triggers:
       - unavailable
       - '0'
       - '0.0'
+conditions: []
 actions:
   - choose:
       - conditions:
@@ -15,69 +16,65 @@ actions:
             entity_id: sensor.ws3900a_rain_rate
             above: 0
             below: 5
-          - condition: template
-            value_template: >-
-              {{(as_timestamp(now()) -
-              as_timestamp(this.attributes.last_triggered)) | int(0) > 180 }}
         sequence:
-          - action: notify.send_message
-            target:
-              entity_id: notify.iphone_17_pro_max
+          - action: notify.mobile_app_iphone_17_pro_max
             data:
               title: Light Rain 🌦️
               message: >-
-                Currently raining at {{ states('sensor.ws3900a_rain_rate') }}
-                mm/h.
+                Currently raining at {{ states('sensor.ws3900a_rain_rate') }} mm/h.
+              data:
+                tag: raining_live
+                live_update: true
+                critical_text: "{{ states('sensor.ws3900a_rain_rate') }} mm/h"
+                notification_icon: mdi:weather-partly-rainy
       - conditions:
           - condition: numeric_state
             entity_id: sensor.ws3900a_rain_rate
             above: 5
             below: 15
-          - condition: template
-            value_template: >-
-              {{(as_timestamp(now()) -
-              as_timestamp(this.attributes.last_triggered)) | int(0) > 180 }}
         sequence:
-          - action: notify.send_message
-            target:
-              entity_id: notify.iphone_17_pro_max
+          - action: notify.mobile_app_iphone_17_pro_max
             data:
               title: Moderate Rain 🌧️
               message: >-
                 Waterproofs essential, raining at {{
                 states('sensor.ws3900a_rain_rate') }} mm/h.
+              data:
+                tag: raining_live
+                live_update: true
+                critical_text: "{{ states('sensor.ws3900a_rain_rate') }} mm/h"
+                notification_icon: mdi:weather-rainy
       - conditions:
           - condition: numeric_state
             entity_id: sensor.ws3900a_rain_rate
             above: 15
             below: 45
-          - condition: template
-            value_template: >-
-              {{(as_timestamp(now()) -
-              as_timestamp(this.attributes.last_triggered)) | int(0) > 180 }}
         sequence:
-          - action: notify.send_message
-            target:
-              entity_id: notify.iphone_17_pro_max
+          - action: notify.mobile_app_iphone_17_pro_max
             data:
               title: Heavy Rain! 🌧️🌧️
               message: >-
                 Stay in it's too wet out there, raining at {{
                 states('sensor.ws3900a_rain_rate') }} mm/h.
+              data:
+                tag: raining_live
+                live_update: true
+                critical_text: "{{ states('sensor.ws3900a_rain_rate') }} mm/h"
+                notification_icon: mdi:weather-pouring
       - conditions:
           - condition: numeric_state
             entity_id: sensor.ws3900a_rain_rate
             above: 45
-          - condition: template
-            value_template: >-
-              {{(as_timestamp(now()) -
-              as_timestamp(this.attributes.last_triggered)) | int(0) > 180 }}
         sequence:
-          - action: notify.send_message
-            target:
-              entity_id: notify.iphone_17_pro_max
+          - action: notify.mobile_app_iphone_17_pro_max
             data:
               title: ‼️Torrential Rain‼️ ⛈️⛈️⛈️
               message: >-
                 Panic it's basically a waterfall from the sky! Raining at {{
                 states('sensor.ws3900a_rain_rate') }} mm/h 🌊🌊🌊.
+              data:
+                tag: raining_live
+                live_update: true
+                critical_text: "{{ states('sensor.ws3900a_rain_rate') }} mm/h"
+                notification_icon: mdi:weather-pouring
+mode: single
